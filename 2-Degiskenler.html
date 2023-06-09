@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <title>Degiskenler</title>
+</head>
+<body>
+    <label for="">SAYI 1</label>
+    <input type="number" ng-model="sayi1">
+    <label for="">SAYI 2</label>
+    <input type="number" ng-model="sayi2">
+    <label>SAYI 1 + SAYI 2 </label>{{"işlemin sonucu =>" +sayi1+sayi2}}
+    <hr>
+    <div ng-init="framework='AngularJS';metin='hello World';sayi=3.14">
+        {{framework+" "+metin+" "+sayi}}
+    </div>
+    <hr>
+    <!--foreach veya "for i in " benzeri data-ng-direktifi kullanımı-->
+    <div ng-init="sayilar = [a=1,a=2,a=3,a=4]; kisiler = {isim:'ali',soyisim:'veli'}">
+    <p data-ng-repeat="sayii in sayilar">{{sayii}}</p>
+    <p>{{kisiler.isim}} {{kisiler.soyisim}}</p>
+</div>
+</body>
+</html>
