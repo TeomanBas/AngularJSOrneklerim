@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <title>TAblo çizdirme örneği</title>
+</head>
+<body ng-app ng-init="hayvanlar=['kedi','kopek','fare']">
+    <div ng-repeat="hayvan in hayvanlar" style="border:1px solid black;padding:5px">
+    {{hayvan}}</div>
+</body>
+</html>

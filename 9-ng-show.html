@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="hayvanlarAlemi">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./lib/angular-1.8.2/angular.min.js"></script>
+  <title>ng-click</title>
+<script>
+  var uygulama = angular.module('hayvanlarAlemi', []);
+  uygulama.controller("gosterKontrol", function($scope) {
+        $scope.kontrolEt = function() {
+          if ($scope.hayvanlar_liste == "kedi") {
+            $scope.kediGoster = true;
+            $scope.kopekGoster = false;
+          } else {
+            $scope.kediGoster = false;
+            $scope.kopekGoster = true;
+          }
+        }
+    });
+</script>
+<body>
+<div ng-controller="gosterKontrol">
+    <select ng-model="hayvanlar_liste" ng-change="kontrolEt()">    
+	    <option value="kopek" selected >Köpek</option>
+	    <option value="kedi" >Kedi</option>
+	</select>
+    <div ng-show="kediGoster">
+		<img src="./img/kedi.jpg" height="200px" width="250px" />
+    </div>
+    <div ng-show="kopekGoster">
+		<img src="./img/kopek.jpeg" height="200px" width="250px" />
+    </div>
+</div>
+</body>
+</html>
