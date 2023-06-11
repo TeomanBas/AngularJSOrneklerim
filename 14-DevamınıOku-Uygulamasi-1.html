@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <title>Devamını Oku Uygulaması</title>
+    <script>
+        var uygulama=angular.module('uygulama',[])
+        uygulama.controller("MetniAc",function($scope){
+            $scope.HepsiniGoster=function(){
+                document.getElementById('1').innerHTML=TamMetin;
+            }
+        });
+        uygulama.directive("soz",function(){
+            return{
+                restrict:"E",
+                link:function($scope,element){
+                    TamMetin=element.html();
+                }
+            }
+        });
+        uygulama.directive("ozlusoz",function(){
+            return{
+                restrict:"A",
+                link:function($scope,element){
+                    element.html(element.html().substring(0,25).concat("..."));
+                }
+            }
+        });
+    </script>
+</head>
+<body ng-app="uygulama">
+    <div id="1" ng-controller="MetniAc">
+        <soz ozlusoz >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur minima nihil a? Voluptatem voluptatum culpa ducimus, libero officiis necessitatibus a itaque repellat sequi eligendi temporibus. Assumenda quis voluptas facere nesciunt!
+        Sint culpa ipsa aliquam, magnam, delectus reprehenderit deleniti nam perspiciatis nisi vitae eos qui debitis excepturi voluptatem ea! Quam eos quaerat rem pariatur saepe at est. Autem hic officia explicabo.
+        Iure omnis architecto qui sapiente eligendi inventore numquam cum explicabo, aliquam, voluptate deserunt vel officia necessitatibus quaerat ullam quam, veritatis dolorum delectus iste maxime amet incidunt illo illum! Sed, repellat.
+        Placeat eos magni consequatur vero minima cum, repellat rem quisquam repellendus blanditiis? Repellat sunt autem est ad deleniti doloribus unde obcaecati aliquam quod distinctio eius, facere, nisi nostrum nesciunt soluta?
+        Dicta sed hic rerum quaerat quasi qui consequuntur expedita harum voluptas distinctio quos natus obcaecati suscipit iste, exercitationem, reprehenderit autem sapiente architecto, nihil ducimus. Modi deserunt mollitia laboriosam debitis pariatur.</soz>
+        <button ng-click="HepsiniGoster()" style="border-radius:28px;border:none;padding:5px;background-color: #00BFFA;">devamını oku</button>
+    </div>
+</body>
+</html>

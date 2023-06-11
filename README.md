@@ -232,3 +232,227 @@ Bir DOM elementinn class değerini okumaya veya değiştirmeye yarar yani bir cs
     background-color:pink;
 }
 ```
+### ng-style
+ng-class gibi stil ataması yapmak için kullanılır.Bu sefer css dosyası kullanmadan doğrudan object nesnesi ile stilleri atayalım.
+```html
+<body ng-app>
+<input type="button" value="stil 1" ng-click="stil={'background-color':'red','color':'white'}">
+<input type="button" value="stil 2" ng-click="stil={'background-color':'white','color':'red'}">
+<div>
+    <p ng-style="stil">AngularJS</p>
+</div>
+</body>
+```
+## Özelleştirilmiş Direktifler Oluşturmak, Etki Türleri/Rollerini Belirlemek,Direktif ve Controller Arası Veri Değişimi
+Kendi direktiflerimizi oluşturmamız için module kullanmamız gerekir.XML'de olduğu gibi kendi tanımlayacağımız bir element için direktif oluşturabiliriz.Direktif olarak tanımlayacağımız elementin geçtiği yerde de otomatik olarak direktif çalışacaktır.
+```html
+<!DOCTYPE html>
+<!--ng-app ile anasayfa adında bir uygulama tanımlandı-->
+<html lang="en" ng-app="anasayfa">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <title>Özelleştirilmiş direktifler</title>
+    <script>
+        // anasayfa adında bir modul tanımlandı
+        var anasayfa = angular.module('anasayfa',[]);
+        // directif tanımlaması yapıldı
+        anasayfa.directive('etiket',function(){
+            //
+            var directive={};
+            /* üç farklı şekilde direktif tanımlanabilir 
+            E : element <test></test>
+            A : Attribute <div test></div>
+            C : Class <div class="test"></div>
+            Bu tanımlar AE veya AEC şeklinde de kullanılabilir ve ek olarak birde M vardır 
+            M : comment
+            yani açıklama satırı olarak verilmiş kodlarda çalışır böylece test tabanlı programlama yapma şansımız olur. 
+            */
+            // E değeri DOM elementi olduğu anlamına geliyor.
+            directive.restrict='E';//element
+            // template ile bu direktifin kullanıldığı yerde yazdırılacak olan metin tanımlandı
+            directive.template="Merhaba etiket";
+            return directive;
+        });
+    </script>
+</head>
+<body>
+<etiket></etiket>
+</body>
+</html>
+```
+
+üç farklı şekilde direktif tanımlanabilir<br>
+
+    E : element <test></test>
+    A : Attribute <div test></div>
+    C : Class <div class="test"></div>
+    
+Bu tanımlar AE veya AEC şeklinde de kullanılabilir ve ek olarak birde M vardır 
+
+    M : comment
+
+yani açıklama satırı olarak verilmiş kodlarda çalışır böylece test tabanlı programlama yapma şansımız olur. 
+
+**restrict :** E, A, C, M veya bunların türevlerini parametre olarak alır.Böylece elemente mi attribute'e mi class'a mı yoksa açıklama satırına mı veya bunlardan birkaçına mı etki edeceği filtrelenir.
+
+**return :** Direktifin çalışması sonucunda döndürülecek olan işlemleri belirtir.
+
+**scope :** Direktifin kapsama alanını belirler eğer kendi faaliyet alanı kullanılacaksa link fonksiyonu içindeki scope'tan alır.Fakat başka kapsama alanları da tanımlanabilir.
+
+**link :** Direktifin aktif olması ile birlikte çalışacak olan fonksiyonu tanımlar.Fonksiyon bir takım parametreleri sırasıyla (yani doğru bir sırada yazılmalı)alır.Böylelikle erişimler sağlanır.Alacağı parametreler scope,attribute,element ve controller'dir.Aslında bu isimlerle de vermemiz gerekmez, Kısaltılmış da verebiliriz.önemli olan sıralarıdır.
+
+**template :** bir html içerik üretmemizi sağlar.
+
+**controller :** Bir direktif içinde veri alışverisi ve işlem yapılacaksa Controller oluşturmak için kullanılır.Böylece bu tür direktifler ana Controller'dan veya Module'den bağımsız olabilir.
+
+**Devamını oku uygulaması**<br>
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <title>Devamını Oku Uygulaması</title>
+    <script>
+        var uygulama=angular.module('uygulama',[])
+        uygulama.controller("MetniAc",function($scope){
+            $scope.HepsiniGoster=function(){
+                document.getElementById('1').innerHTML=TamMetin;
+            }
+        });
+        uygulama.directive("soz",function(){
+            return{
+                restrict:"E",
+                link:function($scope,element){
+                    TamMetin=element.html();
+                }
+            }
+        });
+        uygulama.directive("ozlusoz",function(){
+            return{
+                restrict:"A",
+                link:function($scope,element){
+                    element.html(element.html().substring(0,25).concat("..."));
+                }
+            }
+        });
+    </script>
+</head>
+<body ng-app="uygulama">
+    <div id="1" ng-controller="MetniAc">
+        <soz ozlusoz >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur minima nihil a? Voluptatem voluptatum culpa ducimus, libero officiis necessitatibus a itaque repellat sequi eligendi temporibus. Assumenda quis voluptas facere nesciunt!
+        Sint culpa ipsa aliquam, magnam, delectus reprehenderit deleniti nam perspiciatis nisi vitae eos qui debitis excepturi voluptatem ea! Quam eos quaerat rem pariatur saepe at est. Autem hic officia explicabo.
+        Iure omnis architecto qui sapiente eligendi inventore numquam cum explicabo, aliquam, voluptate deserunt vel officia necessitatibus quaerat ullam quam, veritatis dolorum delectus iste maxime amet incidunt illo illum! Sed, repellat.
+        Placeat eos magni consequatur vero minima cum, repellat rem quisquam repellendus blanditiis? Repellat sunt autem est ad deleniti doloribus unde obcaecati aliquam quod distinctio eius, facere, nisi nostrum nesciunt soluta?
+        Dicta sed hic rerum quaerat quasi qui consequuntur expedita harum voluptas distinctio quos natus obcaecati suscipit iste, exercitationem, reprehenderit autem sapiente architecto, nihil ducimus. Modi deserunt mollitia laboriosam debitis pariatur.</soz>
+        <button ng-click="HepsiniGoster()" style="border-radius:28px;border:none;padding:5px;background-color: #00BFFA;">devamını oku</button>
+    </div>
+</body>
+</html>
+```
+### $compile Derleme Sevisi ile Türetilen Elementlerle Çalışmak
+$compile servisi,Directive veya Controller içindeki bir html içeriğini derlememizi sağlar Daha somut ifade etmek gerekirse html5 sayfası yüklendiğinde AngularJS kodlarının olduğu JS dosyası veya html5 içinde script içine gömülüyse çalıştırılır ve derlenir.Fakat bu mantıkla bakıldığında ilk olarak html5 sayfsı baştan aşağı okunur,sonra AngularJS çalıştırılır.Yani AngularJS çalıştığında HTML5 sayfası üzerinde bir değişiklik yapılmaışsa artık o değişiklik yapılan kısım görmezden gelinir.Bu gibi durumlarda $compile servisi kullanılarak bazı alanlar tekrar derlemeye alınır.
+
+Yapacağımız örneğimizde şöyle bir sorunumuz olacak.Yine bir önceki örneğimizde olduğu gibi bir metin kısaltması yapacağız ve butona tıklandığında tamamını göstereceğiz ancak burada farklı olarak butonu doğrudan html5  sayfasına yazmakta ziyade butonu directive içinde String olarak tanımlayıp,sözün arkasına ekleyeceğizButona tıklandığında dediğimiz derleme sıkıntısı burada yaşanıyor butonu sonradan ekleyeceğimiz için AngularJs bunu görmeyecektir.Bunedenle $compile servisi kullanıp eklediğimiz butonu da tekrar AngularJS kapsama alanına çekeceğiz.
+
+örnekte metni kırpma işlemini farklı bir mantıkla yapacağız metni iki farklı etikete yayacağız özlü sözü soz etiketleri içinde etiket açıp sözün kime ait olduğunu yazacağız bu etiket daha önce gördüpümüz ng-if direktifi ile kontrol edilecek Kontrol değişkenin true/false değerlerine göre bu etiketin içeriği görünür olacak veya görünmeyecek, görünürlüğündeğişken parametresini değiştirebilmek için de directive içinde tanımlayacağımız span etiketleri ile devamını oku şeklinde bir metin oluşturup bu etikete ng-click direktifi ekleyerek bir controller tetikleyeceğiz controller içinde de true/false değerlerini her tıklamada sürekli tersi durumu hale getiren basit bir atama işlemi yapacağız.
+
+
+
+**Devamını oku uygulaması-2**<br>
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <title>Devamını Oku Uygulaması</title>
+    <script>
+        var uygulama=angular.module('uygulama',[])
+        uygulama.controller("DevaminiOku",function($scope){
+            $scope.oku=function(){
+                $scope.goster=!$scope.goster;
+            }
+        });
+        uygulama.directive("ozlusoz",function($compile){
+            var DevaminiOkuButonu="<span ng-click='oku()'>+</span>";
+            return{
+                restrict:"A",
+                link:function(scope,element){
+                    var eklenecekIcerik=$compile(DevaminiOkuButonu)(scope);
+                    element.append(eklenecekIcerik);
+                }
+            }
+        });
+    </script>
+</head>
+<body ng-app="uygulama" ng-init="goster=false">
+    <div ng-controller="DevaminiOku">
+        <soz ozlusoz >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur minima nihil a? Voluptatem voluptatum culpa ducimus, libero officiis necessitatibus a itaque repellat sequi eligendi temporibus. Assumenda quis voluptas facere nesciunt!
+        Sint culpa ipsa aliquam, magnam, delectus reprehenderit deleniti nam perspiciatis nisi vitae eos qui debitis excepturi voluptatem ea! Quam eos quaerat rem pariatur saepe at est. Autem hic officia explicabo.
+        Iure omnis architecto qui sapiente eligendi inventore numquam cum explicabo, aliquam, voluptate deserunt vel officia necessitatibus quaerat ullam quam, veritatis dolorum delectus iste maxime amet incidunt illo illum! Sed, repellat.
+        Placeat eos magni consequatur vero minima cum, repellat rem quisquam repellendus blanditiis? Repellat sunt autem est ad deleniti doloribus unde obcaecati aliquam quod distinctio eius, facere, nisi nostrum nesciunt soluta?
+        Dicta sed hic rerum quaerat quasi qui consequuntur expedita harum voluptas distinctio quos natus obcaecati suscipit iste, exercitationem, reprehenderit autem sapiente architecto, nihil ducimus. Modi deserunt mollitia laboriosam debitis pariatur.
+            <yazar ng-if="goster" style="margin-left:10px">lorem ipsum</yazar>
+    </soz>
+    </div>
+</body>
+</html>
+```
+### Filters (Filtre)
+Filtreler,AngularJS'de verileri formatlamaya, dönüştürmeye sıralamaya ve bunun gibi bir takım işleri yapmaya yarayan hazır metotlardır.
+
+```html
+<script>
+    angular.module("filtreler",[]).controller('ctrl',function($scope){
+        //$scope değişkenleri burada...
+    });
+</script>
+<div ng-app="filtreler" ng-controller="ctrl">
+    <h1></h1>
+</div>
+```
+Burada AngularJs projeye dahil ediliyor ve basit bir module oluşturup direkt controller tanımladık div içerisinde de h1 tag i var bunun içerisindede filtreler test edilecek.<br>
+
+**örnek currency**<br>
+<code>$scope.bakiye=19000;</code><br>
+**filtrelenmesi**<br>
+<code>&lt;h1&gt;{{bakiye|currency}}&lt;/h1&gt;</code><br>
+**çıktı :**<br>
+<code>$19,000.00</code> 
+
+**örnek date**<br>
+tarih değerinin js ile alınması<br>
+<code>new Date().getTime();</code>
+```html
+<h1>{{tarih |date :'short'}}</h1>
+<h1>{{tarih |date :'medium'}}</h1>
+<h1>{{tarih |date :'shortDate'}}</h1>
+<h1>{{tarih |date :'mediumDate'}}</h1>
+<h1>{{tarih |date :'longDate'}}</h1>
+<h1>{{tarih |date :'fullDate'}}</h1>
+<h1>{{tarih |date :'shortTime'}}</h1>
+<h1>{{tarih |date :'mediumTime'}}</h1>
+```
+
+**örnek upper-lower-case** 
+```html
+<h1>{{metin | lowercase}}</h1>
+<h1>{{metin | uppercase}}</h1>
+```
+**filter**<br>
+array veya object verierinde uygulanır.filtre olarak vermiş olduğunuz paramtre değerini dizi değerleri içerisinde tek tek arar ve bu parametre değerini hangi elemanda bulduysa o elemanı verir.Yani o veri nesnesi içinde sadece filtre olarak vermiş olduğunuz değerler varmış gibi davranış gösterir.genellikle ng-repeat ile kullanılır.filter a verilen değeri içinde barındırılan tüm elemanlar meyve içerisinde döndürülür
+<code>$scope.meyveler = ['elma','üzüm','karpuz','armut','karpuz']</code>
+```html
+<h1 ng-repeat="meyve in meyveler | filter: 'armut'"> </h1>
+```
+
+**orderBy**<br>
+Bir JSON verisinde bir key'e göre sıralama yapmamızı sağlar bura sıralama ASC veya DESC metoduyla yapılabilir.Yani artan veya azalan şeklinde bir sıralama yapılabilmektedir.

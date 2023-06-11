@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <title>Devamını Oku Uygulaması</title>
+    <script>
+        var uygulama=angular.module('uygulama',[])
+        uygulama.controller("DevaminiOku",function($scope){
+            $scope.oku=function(){
+                $scope.goster=!$scope.goster;
+            }
+        });
+        uygulama.directive("ozlusoz",function($compile){
+            var DevaminiOkuButonu="<span ng-click='oku()'>+</span>";
+            return{
+                restrict:"A",
+                link:function(scope,element){
+                    var eklenecekIcerik=$compile(DevaminiOkuButonu)(scope);
+                    element.append(eklenecekIcerik);
+                }
+            }
+        });
+    </script>
+</head>
+<body ng-app="uygulama" ng-init="goster=false">
+    <div ng-controller="DevaminiOku">
+        <soz ozlusoz >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur minima nihil a? Voluptatem voluptatum culpa ducimus, libero officiis necessitatibus a itaque repellat sequi eligendi temporibus. Assumenda quis voluptas facere nesciunt!
+        Sint culpa ipsa aliquam, magnam, delectus reprehenderit deleniti nam perspiciatis nisi vitae eos qui debitis excepturi voluptatem ea! Quam eos quaerat rem pariatur saepe at est. Autem hic officia explicabo.
+        Iure omnis architecto qui sapiente eligendi inventore numquam cum explicabo, aliquam, voluptate deserunt vel officia necessitatibus quaerat ullam quam, veritatis dolorum delectus iste maxime amet incidunt illo illum! Sed, repellat.
+        Placeat eos magni consequatur vero minima cum, repellat rem quisquam repellendus blanditiis? Repellat sunt autem est ad deleniti doloribus unde obcaecati aliquam quod distinctio eius, facere, nisi nostrum nesciunt soluta?
+        Dicta sed hic rerum quaerat quasi qui consequuntur expedita harum voluptas distinctio quos natus obcaecati suscipit iste, exercitationem, reprehenderit autem sapiente architecto, nihil ducimus. Modi deserunt mollitia laboriosam debitis pariatur.
+            <yazar ng-if="goster" style="margin-left:10px">lorem ipsum</yazar>
+    </soz>
+    </div>
+</body>
+</html>

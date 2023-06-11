@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/angular-1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('filtreler',[]).controller('ctrl',function($scope){
+            $scope.bakiye=19000;
+            $scope.zaman=new Date().getDate();
+            $scope.metin="hello AngularJS";
+            $scope.meyveler = ['elma','üzüm','karpuz','armut','karpuz'];
+        });
+    </script>
+    <title>Filters örnekleri</title>
+</head>
+<body>
+    <div ng-app="filtreler" ng-controller="ctrl">
+        <h1>{{ bakiye | currency }}</h1>
+    <hr>
+        <h1>{{ zaman | date : 'short' }}</h1>
+        <h1>{{ zaman | date : 'medium' }}</h1>
+        <h1>{{ zaman | date : 'shortDate' }}</h1>
+        <h1>{{ zaman | date : 'mediumDate' }}</h1>
+        <h1>{{ zaman | date : 'longDate' }}</h1>
+        <h1>{{ zaman | date : 'fullDate' }}</h1>
+        <h1>{{ zaman | date : 'shortTime' }}</h1>
+        <h1>{{ zaman | date : 'mediumTime' }}</h1>
+    <hr>
+    <h1>{{metin | lowercase}}</h1>
+    <h1>{{metin | uppercase}}</h1>
+    <hr>
+    <h1 ng-repeat="meyve in meyveler | filter: 'armut'">{{meyve}}</h1>
+    <hr>
+
+</div>
+</body>
+</html>
