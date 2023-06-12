@@ -1,1 +1,1 @@
-# Burada kullanılan framework yer alıyor,html dosyalarına yerel olarak linklemeyi tercih ettiğimden dolayı burada bulunan angular-1.8.2 dosyası .gitignore içinde görmezden gelinmiştir.
+# Burada kullanılan framework yer alıyor,html dosyalarına yerel olarak linklemeyi tercih ettiğimden dolayı burada bulunan angular-1.8.2 ,ajax,bootstrap-5.3.0-dist ve jquery dosyası .gitignore içinde görmezden gelinmiştir.
