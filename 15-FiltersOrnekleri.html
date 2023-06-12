@@ -11,7 +11,14 @@
             $scope.zaman=new Date().getDate();
             $scope.metin="hello AngularJS";
             $scope.meyveler = ['elma','üzüm','karpuz','armut','karpuz'];
-        });
+            $scope.meyvelerjson=[{ad:'elma',kg:'122'},{ad:'armut',kg:'321'},{ad:'çilek',kg:'300'}];
+            $scope.sayilar=[1,2,3,4,5,6,7,8,9];
+        }).filter('kareAl',function(){
+            return function(x){
+                return x*x;
+            }
+        });    
+        
     </script>
     <title>Filters örnekleri</title>
 </head>
@@ -33,7 +40,22 @@
     <hr>
     <h1 ng-repeat="meyve in meyveler | filter: 'armut'">{{meyve}}</h1>
     <hr>
-
+    <table border="1px solid black">
+        <thead>
+            <td><b ng-click="asc=!asc">İsim</b></td>
+            <td><b>Kg</b></td>
+        </thead>
+        <tbody>
+            <tr ng-repeat="meyve in meyvelerjson | orderBy : ad : asc | limitTo:2">
+                <td>{{meyve.ad}}</td>
+                <td>{{meyve.kg}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <span ng-repeat="sayi in sayilar">{{sayi}},</span>
+    <br>
+    <span ng-repeat="sayi in sayilar">{{sayi | kareAl}},</span>
 </div>
 </body>
 </html>

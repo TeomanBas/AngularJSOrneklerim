@@ -1,0 +1,1 @@
+var videolar = angular.module('videolar', []);

@@ -355,7 +355,7 @@ yani açıklama satırı olarak verilmiş kodlarda çalışır böylece test tab
 </body>
 </html>
 ```
-### $compile Derleme Sevisi ile Türetilen Elementlerle Çalışmak
+## $compile Derleme Sevisi ile Türetilen Elementlerle Çalışmak
 $compile servisi,Directive veya Controller içindeki bir html içeriğini derlememizi sağlar Daha somut ifade etmek gerekirse html5 sayfası yüklendiğinde AngularJS kodlarının olduğu JS dosyası veya html5 içinde script içine gömülüyse çalıştırılır ve derlenir.Fakat bu mantıkla bakıldığında ilk olarak html5 sayfsı baştan aşağı okunur,sonra AngularJS çalıştırılır.Yani AngularJS çalıştığında HTML5 sayfası üzerinde bir değişiklik yapılmaışsa artık o değişiklik yapılan kısım görmezden gelinir.Bu gibi durumlarda $compile servisi kullanılarak bazı alanlar tekrar derlemeye alınır.
 
 Yapacağımız örneğimizde şöyle bir sorunumuz olacak.Yine bir önceki örneğimizde olduğu gibi bir metin kısaltması yapacağız ve butona tıklandığında tamamını göstereceğiz ancak burada farklı olarak butonu doğrudan html5  sayfasına yazmakta ziyade butonu directive içinde String olarak tanımlayıp,sözün arkasına ekleyeceğizButona tıklandığında dediğimiz derleme sıkıntısı burada yaşanıyor butonu sonradan ekleyeceğimiz için AngularJs bunu görmeyecektir.Bunedenle $compile servisi kullanıp eklediğimiz butonu da tekrar AngularJS kapsama alanına çekeceğiz.
@@ -455,4 +455,132 @@ array veya object verierinde uygulanır.filtre olarak vermiş olduğunuz paramtr
 ```
 
 **orderBy**<br>
-Bir JSON verisinde bir key'e göre sıralama yapmamızı sağlar bura sıralama ASC veya DESC metoduyla yapılabilir.Yani artan veya azalan şeklinde bir sıralama yapılabilmektedir.
+Bir JSON verisinde bir key'e göre sıralama yapmamızı sağlar bura sıralama ASC veya DESC metoduyla yapılabilir.Yani artan veya azalan şeklinde bir sıralama yapılabilmektedir.limitTo ile gösterilecek satır sayısı verilebilir.
+
+örnek json verisi:<br><code>$scope.meyveler=[{ad:'elma',kg:'122'},{ad:'armut',kg:'321'},{ad:'çilek',kg:'300'}];</code>
+```html
+<table>
+    <thead>
+        <td><b ng-click="asc=!asc">İsim</b></td>
+        <td><b>Kg</b></td>
+    </thead>
+    <tbody>
+        <tr ng-repeat="meyve in meyveler | orderBy : ad:asc">
+            <td>{{meyve.ad}}</td>
+            <td>{{meyve.kg}}</td>
+        </tr>
+    </tbody>
+</table>
+```
+**limitTo**<br>
+```html
+<tr ng-repeat="meyve in meyveler | orderBy : ad:asc">
+```
+**Özel filtre yazmak**<br>
+Verilen sayının karesini alan bir filtre örneği
+```html
+angular.module('karefiltre',[]).controller('kare',function($scope){
+    $scope.sayilar=[1,2,3,4,5,6,7,8,9];
+})
+.filter('KareAl',function(){
+    return function(x){
+        return x*x;
+    }
+})
+```
+## AngularJS ile Css Kullanımı
+```html
+<script>
+        var uygulama = angular.module("uygulama",[]);
+        uygulama.directive('renkliyazi', function() {
+            return {
+                restrict: 'E',
+                replace: true,
+                template: '<p style="background-color:{{renk}}">Bu yazı {{renk}} rengindedir',
+                link: function(scope, ele, attr) {
+                    ele.bind('click', function() {
+                        ele.css('background-color', 'white');
+                        scope.$apply(function() {
+                               scope.renk = "white";
+                        });
+                    });
+                }
+            };
+        });
+   </script> 
+```
+**restrict: 'E'** ile diretifimidiz element tanımladık<br>
+**replace: true** ile de DOM değeri değiştirebilme özelliğini açtık.Yani true olduğunda etiket silinir ve yerine AngularJS template değeri atanır.Seo için true olmalıdır.<br>
+**template :** '&lt;p style="background-color:{{renk}}">Bu yazı {{renk}} renginde dir' ile bir dom elementi oluşturduk.p etiketi tanımlayıp bunun arkaplan renk özelliğini background-color css tanımlası kullanarak {{renk}} direktifinden gelen renk kodu ile atayarak yaptık.{{renk}} direktifi de html içindeki ng-model="renk" direktifi olan input elementine bağlıdır.<br>
+**link** için bir fonksiyon oluşturuduk.fonksiyon parametre değerlerini sırası ile scope,ele,attr olarak verdik bu parametre isimlerinin bir önemi yoktur sadece sıralamanın doğru olması gereklidir.Fonksiyon içinde **ele** ile ilgili elementin DOM ismini hedefledik.Yani &lt;renkliyazi&gt; etiketi.<br>
+
+Bu etikete bind direktifi ile fonksiyon ekledik fonksiyonun tetikleme olay yöneticisini de click olarak belirttik.fonksiyon içinde de .css metodunu kullanarak **ele** şeklinde tanımlanmış olan etiketin background-color özelliğine white değerini göndererek yazının tekrar beyaz zeminli yazılmasını sağladık.
+
+**apply** direktifi ile de **scope** içinde scope.renk tanımlaması ile değişken tanımlamış oluyoruz ve değerini de white veriyoruz.Renk değişkeni bire direktif olduğu için DOM içinde de bind olmuş olacak ve white yazısı cümle içinde ve metin kutusunda görünecek.
+
+## AngularJS ile BootStrap'ın Beraber Kullanımı ve MVW temel örnek
+<code>17-AngularJS-BootStrapKullanimi.html</code><br>
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="./lib/bootstrap-5.3.0-dist/css/bootstrap.min.css">
+<script src="./lib/ajax/jquery/jquery.min.js"></script>
+<script src="./lib/bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
+<script src="./lib/ajax/angular/angular.min.js"></script>
+<script src="./js/yapilandirici.js"></script>
+<script src="./js/video-veri.js"></script> 
+</head>
+<body ng-app="videolar" >
+  <div ng-controller="liste">
+    {{at}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4">
+          <table class="table table-hover">
+            <tr>
+              <th>Video</th>
+              <th>Açıklama</th>
+              <th>İzlenme</th>
+              <th></th>
+            </tr>
+            <tr ng-repeat="x in video">
+              <td><img src='{{x.resim}}' width='240px' height='180px' /></td>
+              <td>{{x.detay}}</td>
+              <td><span class="badge">{{x.izlenme}}</span></td>
+              <td><a href="{{x.adres}}">izle</a></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+```
+
+<code>lib/yapilandirici.js</code><br>
+```javascript
+var videolar = angular.module('videolar', []);
+```
+
+<code>lib/video-veri.js</code><br>
+```javascript
+videolar.controller("liste", function($scope) {
+          $scope.video = [{
+            "resim": "./img/kedi.jpg",
+            "detay": "açıklama metni 1",
+            "izlenme": "551",
+            "adres": "ornekvideolinki1"
+          }, {
+            "resim": "./img/kopek.jpeg",
+            "detay": "açıklama metni 2",
+            "izlenme": "3634",
+            "adres": "ornekvideolinki2"
+          }];
+});
+```
+
