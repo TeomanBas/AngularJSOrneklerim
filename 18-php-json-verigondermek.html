@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="./js/18-script.js"></script>
+</head>
+<body ng-app="uygulama" ng-controller="kontrol">
+<div class="container">
+<div class="col-sm-4 col-sm-offset-4">
+    <div class="page-header"><h3>Üye Giriş</h3></div>
+    <form ng-submit="formGonder()">
+    <div class="form-group">
+        <label>Kullanıcı Adı</label>
+        <input type="text" class="form-control" ng-model="kullanici.kullaniciAdi">
+        <span ng-show="hataKullaniciAdi">{{hataKullaniciAdi}}</span>
+    </div>
+    <div class="form-group">
+        <label>Şifre</label>
+        <input type="password" class="form-control" ng-model="kullanici.kullaniciSifre">
+        <span ng-show="hataKullaniciSifre">{{hataKullaniciSifre}}</span>
+    </div>
+    <button type="submit" class="btn btn-primary">Giriş</button>
+    </form>
+	<div class="pull-right"><h4>{{mesaj}}</h4></div>
+</div>
+</div>
+</body>
+</html>
