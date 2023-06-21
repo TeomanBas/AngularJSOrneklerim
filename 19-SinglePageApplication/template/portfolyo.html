@@ -1,0 +1,17 @@
+<br>
+<div class="row">
+  <div class="col-sm-4 col-sm-offset-8">
+    <div class="well well-sm"><b>{{baslik}}</b></div>
+  </div>
+</div>
+<div>
+  <p>{{icerik}}</p>
+      <div style="float:left">
+        <div ng-repeat="orneksatir in sonuc">
+          <div ng-repeat="(id, degerler) in orneksatir">
+            <div><b>{{id+1}} - {{degerler.isim}}</b></div>
+            <div><img ng-src="{{degerler.ResmiURL}}" /></div>
+          </div>
+        </div>
+      </div>
+</div>
